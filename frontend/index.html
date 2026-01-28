@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Web Tool</title>
+</head>
+<body>
+
+<h2>🔐 Crypto Web Tool</h2>
+
+<input type="file" id="file"><br><br>
+<input type="password" id="password" placeholder="Password / Key"><br><br>
+
+<button onclick="encrypt()">Encrypt</button>
+<button onclick="decrypt()">Decrypt</button>
+
+<script>
+async function encrypt() {
+  const file = document.getElementById("file").files[0];
+  const password = document.getElementById("password").value;
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("password", password);
+
+  const res = await fetch("https://YOUR-BACKEND-URL/encrypt", {
+    method: "POST",
+    body: form
+  });
+
+  download(res);
+}
+
+async function decrypt() {
+  const file = document.getElementById("file").files[0];
+  const password = document.getElementById("password").value;
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("password", password);
+
+  const res = await fetch("https://YOUR-BACKEND-URL/decrypt", {
+    method: "POST",
+    body: form
+  });
+
+  download(res);
+}
+
+async function download(res) {
+  const blob = await res.blob();
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "result";
+  a.click();
+}
+</script>
+
+</body>
+</html>
